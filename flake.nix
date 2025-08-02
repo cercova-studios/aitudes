@@ -18,28 +18,28 @@
 
         # AI/ML optimized Python environment matching your current setup
         aiPythonEnv = pkgs.python311.withPackages (ps: with ps; [
-          # Core aitudes dependencies (from your pyproject.toml)
+          # === Core Aitudes dependencies ===
           openai
           loguru
           numpy
           jinja2
 
-          # AI/ML stack
+          # === AI/ML stack ===
           torch
           transformers
           huggingface-hub
 
-          # MCP protocol (when available)
-          # Note: mcp package might need manual installation via pip in shell
+          # === MCP protocol support ===
+          # Note: 'mcp' package might need manual installation via pip in shell
 
-          # Development and testing tools
+          # === Development and testing tools ===
           pkgs.python311Packages.pytest
           pkgs.python311Packages.black
           ruff
           pkgs.python311Packages.mypy
           pkgs.python311Packages.ipykernel
 
-          # Additional packages from your current setup
+          # === Additional utilities ===
           requests
           typing-extensions
         ]);
