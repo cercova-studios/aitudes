@@ -30,6 +30,8 @@ clean:
 	@find . -type d -name ".ruff_cache" -exec rm -rf {} +
 	@find . -type d -name ".mypy_cache" -exec rm -rf {} +
 	@find . -type f -name ".DS_Store" -exec rm -f {} +
+	@find . -type d -name ".ipynb_checkpoints" -exec rm -rf {} +
+	@find . -type d -name ".qodo" -exec rm -rf {} +
 	@echo "✅ Cleanup complete!"
 
 clean-bazel:

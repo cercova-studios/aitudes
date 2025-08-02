@@ -143,7 +143,7 @@ class BaseChatCompletions(BaseModel):
     def check_reasoning_effort(cls, v: str, info: ValidationInfo) -> str:
         """
         Validates that the reasoning_effort parameter is only set for supported models.
-        
+
         Raises:
             ValueError: If reasoning_effort is provided for a model not in REASONING_MODELS.
         """
