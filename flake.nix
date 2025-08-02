@@ -118,10 +118,11 @@ except: print('  - OpenAI: not available')
               alias python-test="python -m pytest"
               alias format-python="ruff format . && ruff check --fix ."
 
-              # Install MCP if not available in nixpkgs yet
+              # Check for MCP; fail fast if not available
               if ! python -c "import mcp" 2>/dev/null; then
-                echo "📦 Installing MCP package via pip..."
-                pip install mcp[cli]>=1.9.1 --user --quiet || echo "⚠️  MCP installation failed"
+                echo "❌ MCP Python package is not available in this environment."
+                echo "   Please add it to your Nix environment or install it manually."
+                return 1
               fi
 
               echo "✅ Environment ready! Use 'direnv allow' for auto-activation"
