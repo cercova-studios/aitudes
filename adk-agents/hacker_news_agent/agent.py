@@ -12,7 +12,7 @@ os.environ["GOOGLE_API_KEY"] = os.environ.get("GEMINI_API_KEY")
 playwright_tool = MCPToolset(
     connection_params=StdioServerParameters(
         command="npx",
-        args=["-y", "@playwright/mcp@latest", "--browser=firefox--headless"],
+        args=["-y", "@playwright/mcp@latest", "--browser=firefox", "--headless"],
     )
 )
 
