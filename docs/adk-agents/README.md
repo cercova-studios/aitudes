@@ -73,7 +73,7 @@ router_agent = ParallelAgent(
 ### Usage
 
 ```python
-from adk_agents.research_agent import agent
+from research_agent import agent
 
 # Use the research agent
 result = agent.run("Find the top stories on Hacker News")
@@ -260,7 +260,7 @@ bunx -y exa-mcp-server
 
 ```python
 from dotenv import load_dotenv
-from adk_agents.research_agent import agent
+from research_agent import agent
 
 # Load environment variables
 load_dotenv()
@@ -310,7 +310,7 @@ Optional environment variables:
 
 ```python
 from dotenv import load_dotenv
-from adk_agents.research_agent import agent
+from research_agent import agent
 
 load_dotenv()
 
