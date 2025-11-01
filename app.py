@@ -283,7 +283,7 @@ def get():
                 *[
                     Div(
                         Div(
-                            Span(project["icon"]),
+                            Span(project["icon"], cls="project-icon"),
                             Div(H3(project["title"]), Span(project["category"])),
                             cls="project-header",
                         ),
