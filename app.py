@@ -250,7 +250,7 @@ def get():
             Div(
                 Div(
                     Span(str(len(PROJECTS)), style=TEXT_COLOR, cls="stat-number"),
-                    Span(" Total Projects", style=TEXT_COLOR),
+                    Span(" Total Projects", style=TEXT_COLOR, cls="stat-label"),
                     cls="stat",
                 ),
                 Div(
@@ -265,16 +265,18 @@ def get():
                             )
                         ),
                         style=TEXT_COLOR,
+                        cls="stat-number",
                     ),
-                    Span(" Active Projects", style=TEXT_COLOR),
+                    Span(" Active Projects", style=TEXT_COLOR, cls="stat-label"),
                     cls="stat",
                 ),
                 Div(
                     Span(
                         str(len(set(p["category"] for p in PROJECTS.values()))),
                         style=TEXT_COLOR,
+                        cls="stat-number",
                     ),
-                    Span(" Categories", style=TEXT_COLOR),
+                    Span(" Categories", style=TEXT_COLOR, cls="stat-label"),
                     cls="stat",
                 ),
                 cls="stats",
@@ -292,7 +294,8 @@ def get():
                         ),
                         P(project["description"], cls="project-description"),
                         Span(
-                            project["status"].title(), cls=f"project-status status-{project['status']}"
+                            project["status"].title(),
+                            cls=f"project-status status-{project['status']}",
                         ),
                         cls="project-card",
                     )
