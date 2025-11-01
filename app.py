@@ -290,7 +290,7 @@ def get():
                             ),
                             cls="project-header",
                         ),
-                        P(project["description"]),
+                        P(project["description"], cls="project-description"),
                         Span(
                             project["status"].title(), cls=f"status-{project['status']}"
                         ),
