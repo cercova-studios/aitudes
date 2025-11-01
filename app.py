@@ -292,7 +292,7 @@ def get():
                         ),
                         P(project["description"], cls="project-description"),
                         Span(
-                            project["status"].title(), cls=f"status-{project['status']}"
+                            project["status"].title(), cls=f"project-status status-{project['status']}"
                         ),
                         cls="project-card",
                     )
