@@ -249,7 +249,7 @@ def get():
             ),
             Div(
                 Div(
-                    Span(str(len(PROJECTS)), style=TEXT_COLOR),
+                    Span(str(len(PROJECTS)), style=TEXT_COLOR, cls="stat-number"),
                     Span(" Total Projects", style=TEXT_COLOR),
                     cls="stat",
                 ),
