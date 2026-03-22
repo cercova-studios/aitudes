@@ -37,15 +37,12 @@ def function_to_json(func: Callable[..., Any]) -> dict[str, Any]:
         )
 
     parameters = {}
+    required = []
     for param in signature.parameters.values():
         param_type = type_map.get(param.annotation, "string")
         parameters[param.name] = {"type": param_type}
-
-    required = [
-        param.name
-        for param in signature.parameters.values()
-        if param.default == inspect.Parameter.empty
-    ]
+        if param.default == inspect.Parameter.empty:
+            required.append(param.name)
 
     return {
         "type": "function",
