@@ -272,7 +272,7 @@ def get():
                 ),
                 Div(
                     Span(
-                        str(len(set(p["category"] for p in PROJECTS.values()))),
+                        str(len({p["category"] for p in PROJECTS.values()})),
                         style=TEXT_COLOR,
                         cls="stat-number",
                     ),
