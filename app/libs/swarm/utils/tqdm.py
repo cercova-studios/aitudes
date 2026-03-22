@@ -7,6 +7,45 @@ from typing import Iterable, Iterator, Generic, Optional, TypeVar, Any
 T = TypeVar("T")
 
 
+def HMS(t: float) -> str:
+    """
+    Converts a time duration in seconds to a human-readable H:MM:SS or M:SS format.
+
+    Args:
+        t: Time duration in seconds.
+
+    Returns:
+        A string representing the duration in hours, minutes, and seconds, omitting leading zero hours if not needed.
+    """
+    return ":".join(
+        f"{x:02d}" if i else str(x)
+        for i, x in enumerate([int(t) // 3600, int(t) % 3600 // 60, int(t) % 60])
+        if i or x
+    )
+
+
+def SI(x: float) -> str:
+    """
+    Converts a numeric value to a string with an appropriate SI prefix.
+
+    Args:
+        x: The numeric value to convert.
+
+    Returns:
+        A string representing the value scaled with an SI prefix (e.g., k, M, G).
+    """
+    return (
+        (
+            f"{x / 1000 ** int(g := math.log(x, 1000)):.{int(3 - 3 * math.fmod(g, 1))}f}"[
+                :4
+            ].rstrip(".")
+            + " kMGTPEZY"[int(g)].strip()
+        )
+        if x
+        else "0.00"
+    )
+
+
 class tqdm(Generic[T]):
     def __init__(
         self,
@@ -96,72 +135,39 @@ class tqdm(Generic[T]):
             n: Number of iterations to increment the progress by.
             close: If True, finalizes and closes the progress bar display.
         """
-        self.n, self.i = self.n + n, self.i + 1
+        self.count, self.current_index = self.count + n, self.current_index + 1
 
-        if self.disable or (not close and self.i % self.skip != 0):
+        if self.disable or (not close and self.current_index % self.skip != 0):
             return
 
         prog, elapsed, ncols = (
-            self.n / self.t if self.t else 0,
-            time.perf_counter() - self.st,
+            self.count / self.total if self.total else 0,
+            time.perf_counter() - self.start_time,
             shutil.get_terminal_size().columns,
         )
 
-        if self.i / elapsed > self.rate and self.i:
-            self.skip = max(int(self.i / elapsed) // self.rate, 1)
-
-        def HMS(t: float) -> str:
-            """
-            Converts a time duration in seconds to a human-readable H:MM:SS or M:SS format.
-
-            Args:
-                t: Time duration in seconds.
-
-            Returns:
-                A string representing the duration in hours, minutes, and seconds, omitting leading zero hours if not needed.
-            """
-            return ":".join(
-                f"{x:02d}" if i else str(x)
-                for i, x in enumerate(
-                    [int(t) // 3600, int(t) % 3600 // 60, int(t) % 60]
-                )
-                if i or x
-            )
-
-        def SI(x: float) -> str:
-            """
-            Converts a numeric value to a string with an appropriate SI prefix.
-
-            Args:
-                x: The numeric value to convert.
-
-            Returns:
-                A string representing the value scaled with an SI prefix (e.g., k, M, G).
-            """
-            return (
-                (
-                    f"{x / 1000 ** int(g := math.log(x, 1000)):.{int(3 - 3 * math.fmod(g, 1))}f}"[
-                        :4
-                    ].rstrip(".")
-                    + " kMGTPEZY"[int(g)].strip()
-                )
-                if x
-                else "0.00"
-            )
+        if self.current_index / elapsed > self.rate and self.current_index:
+            self.skip = max(int(self.current_index / elapsed) // self.rate, 1)
 
         prog_text = (
-            f"{SI(self.n)}{f'/{SI(self.t)}' if self.t else self.unit}"
+            f"{SI(self.count)}{f'/{SI(self.total)}' if self.total else self.unit}"
             if self.unit_scale
-            else f"{self.n}{f'/{self.t}' if self.t else self.unit}"
+            else f"{self.count}{f'/{self.total}' if self.total else self.unit}"
         )
 
         est_text = (
-            f"<{HMS(elapsed / prog - elapsed) if self.n else '?'}" if self.t else ""
+            f"<{HMS(elapsed / prog - elapsed) if self.count else '?'}"
+            if self.total
+            else ""
         )
 
         it_text = (
-            (SI(self.n / elapsed) if self.unit_scale else f"{self.n / elapsed:5.2f}")
-            if self.n
+            (
+                SI(self.count / elapsed)
+                if self.unit_scale
+                else f"{self.count / elapsed:5.2f}"
+            )
+            if self.count
             else "?"
         )
 
@@ -173,7 +179,7 @@ class tqdm(Generic[T]):
             + self.desc
             + (
                 f"{100 * prog:3.0f}%|{('█' * int(num := sz * prog) + ' ▏▎▍▌▋▊▉'[int(8 * num) % 8].strip()).ljust(sz, ' ')}| "
-                if self.t
+                if self.total
                 else ""
             )
             + suf
